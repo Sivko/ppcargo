@@ -1,4 +1,3 @@
-// import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 
@@ -6,6 +5,8 @@ import Stack1 from "@/navigations/Stack1";
 import Stack2 from "@/navigations/Stack2";
 import Stack3 from "@/navigations/Stack3";
 import { View } from "react-native";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,15 +17,11 @@ export default function Tabs() {
         tabBarIcon: ({ focused, color, size }) => {
           switch (route.name) {
             case "Принять места":
-              // return <AntDesign name="dropbox" size={size} color={color} />;
-              return <View></View>
+              return <FontAwesome name="dropbox" size={size} color={color} />;
             case "Сканировать рейсы":
-              // return <AntDesign name="barcode" size={size} color={color} />;
-              return <View></View>
-
+              return <FontAwesome name="barcode" size={size} color={color} />;
             case "Настройки":
-              // return <Ionicons name="options" size={size} color={color} />;
-              return <View></View>
+              return <Ionicons name="options" size={size} color={color} />;
           }
         },
         tabBarInactiveTintColor: "gray",

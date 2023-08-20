@@ -1,4 +1,6 @@
-// import { AntDesign, Feather } from "@expo/vector-icons";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather';
+
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -62,16 +64,16 @@ export default function InvoceList() {
               Отправлено мест: {data.item?.slots.filter((e) => e.data.id).length}
             </Text>
             {!data.item?.invoice?.data?.id && (
-              // <Feather name="download-cloud" size={24} color="#ddd" />
-              <Text>icon</Text>
+              <Feather name="download-cloud" size={24} color="#ddd" />
+              // <Text>icon</Text>
             )}
             {data.item?.slots?.length === data.item?.slots.filter((e) => e.data.id).length && (
-              // <Feather name="download-cloud" size={24} color="#2196f3" />
-              <Text>icon</Text>
+              <Feather name="download-cloud" size={24} color="#2196f3" />
+              // <Text>icon</Text>
             )}
             {data.item?.invoice?.data?.id && data.item?.slots?.length !== data.item?.slots.filter((e) => e.data.id).length && (
-              // <Feather name="download-cloud" size={24} color="#deb617" />
-              <Text>icon</Text>
+              <Feather name="download-cloud" size={24} color="#deb617" />
+              // <Text>icon</Text>
             )}
           </View>
         </View>
@@ -85,7 +87,7 @@ export default function InvoceList() {
         style={[styles.actionButton, styles.deleteBtn]}
         onPress={() => deleteItem(rowMap, data.item.index)}
       >
-        {/* <AntDesign name="delete" size={24} color="#fff" /> */}
+        <AntDesign name="delete" size={24} color="#fff" />
       </TouchableOpacity>
     </View>
   );

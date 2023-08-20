@@ -1,4 +1,5 @@
-// import { AntDesign } from "@expo/vector-icons";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import moment from "moment";
 import { useState, useEffect } from "react";
 import {
@@ -76,8 +77,7 @@ function CreateScreen({ route, navigation }) {
           }}
         >
           {/* <Text>Добавить место (добавлено:)</Text> */}
-          {/* <AntDesign name="pluscircleo" size={50} color="#207aff" /> */}
-          <Text>icon</Text>
+          <AntDesign name="pluscircleo" size={50} color="#207aff" />
         </TouchableOpacity>
       </View>
     </View>

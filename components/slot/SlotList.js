@@ -1,4 +1,5 @@
-// import { AntDesign } from "@expo/vector-icons";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import {
   StyleSheet,
   Text,
@@ -37,8 +38,7 @@ export default function SlotList({ data, setData, navigation }) {
           <Text>{el.item.index}</Text>
         </View>
         <View style={styles.image}>
-          {/* <AntDesign name="picture" size={70} color="#d3d3d3" /> */}
-          <Text>icon</Text>
+          <AntDesign name="picture" size={70} color="#d3d3d3" />
         </View>
         <View style={styles.info}>
           <Text>Название: {el.item?.data?.attributes?.name}</Text>
@@ -81,8 +81,7 @@ export default function SlotList({ data, setData, navigation }) {
         style={[styles.actionButton, styles.deleteBtn]}
         onPress={() => deleteItem(data)}
       >
-        {/* <AntDesign name="delete" size={24} color="#fff" /> */}
-        <Text>icon</Text>
+        <AntDesign name="delete" size={24} color="#fff" />
       </TouchableOpacity>
     </View>
   );

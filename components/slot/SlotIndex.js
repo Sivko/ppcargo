@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-// import { AntDesign } from "@expo/vector-icons";
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useEffect, useState } from "react";
 import {
   View,
@@ -52,7 +52,7 @@ function SlotIndex({ route }) {
         <View style={styles.card}>
           {/* <Text>{JSON.stringify(route.params.data[route.params.index - 1].attributes?.customs['custom_114632'])}</Text> */}
           {/* <ImagePickerPreview> */}
-          {/* <AntDesign name="picture" size={124} color="black" /> */}
+          <AntDesign name="picture" size={124} color="black" />
           <Text>icon</Text>
           {/* </ImagePickerPreview> */}
           <View style={styles.dimensions}>

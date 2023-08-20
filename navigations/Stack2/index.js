@@ -1,4 +1,4 @@
-// import { Octicons } from "@expo/vector-icons";
+import Octicons from 'react-native-vector-icons/Octicons';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { Button, Text, TouchableOpacity } from "react-native";
@@ -37,8 +37,7 @@ export function Stack2({ navigation }) {
                 }}
                 style={{ marginLeft: 10 }}
               >
-                {/* <Octicons name="download" size={24} color="#2196f3" /> */}
-                <Text>icon</Text>
+                <Octicons name="download" size={24} color="#2196f3" />
               </TouchableOpacity>
             ),
           headerRight: () =>

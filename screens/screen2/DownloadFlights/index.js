@@ -1,4 +1,6 @@
-// import { FontAwesome, Feather } from "@expo/vector-icons";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
+
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -53,25 +55,21 @@ export default function DownloadFlights() {
           </View>
           <View style={{ gap: 10 }}>
             <View style={{ alignItems: "center", justifyContent: "center" }}>
-              {/* <Feather name="upload-cloud" size={24} color="#2196f3" /> */}
-              <Text>icon</Text>
+              <Feather name="upload-cloud" size={24} color="#2196f3" />
               <Text style={{ fontSize: 10 }}>Отпр: 0/10</Text>
             </View>
             <View style={{ alignItems: "center", justifyContent: "center" }}>
-              {/* <Feather name="download-cloud" size={24} color="#2196f3" /> */}
-              <Text>icon</Text>
+              <Feather name="download-cloud" size={24} color="#2196f3" />
               <Text style={{ fontSize: 10 }}>Загр: 0/10</Text>
             </View>
           </View>
           {press && (
             <View>
               {!checkedElement[0] === 0 && (
-                // <Feather name="circle" size={24} color="#ddd" />
-                <Text>icon</Text>
+                <Feather name="circle" size={24} color="#ddd" />
               )}
               {checkedElement[0] === 0 && (
-                // <FontAwesome name="check-circle" size={24} color="#2196f3" />
-                <Text>icon</Text>
+                <FontAwesome name="check-circle" size={24} color="#2196f3" />
               )}
             </View>
           )}
