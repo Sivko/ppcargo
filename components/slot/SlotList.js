@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 
-import { fields } from "../../requests/config";
+import { fields } from "@/requests/config";
 
 export default function SlotList({ data, setData, navigation }) {
   const dataList = data.map((e, index) => ({ ...e, index: index + 1 }));

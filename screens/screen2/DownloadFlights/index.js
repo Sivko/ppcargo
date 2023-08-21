@@ -10,70 +10,96 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 
-import FlightCard from "@/components/FlightCard";
-import { timeout } from "@/requests/config";
-import downloadFlightDeals from "@/requests/downloadFlightDeals";
-import { getFlights } from "@/requests/flights";
-import { getFlightDeals } from "@/requests/local/getSetFlights";
 import pressedStore from "@/stores/pressedStore";
+import scanStore from '@/stores/scanStore';
+import { fields } from '@/requests/config';
 
 export default function DownloadFlights() {
+  const { scanItems, getStoragescanItems } = scanStore();
   const { press, setPress } = pressedStore();
-  const [checkedElement, setCheckedElement] = useState([]);
+  const [checkedElements, setCheckedElements] = useState([]);
 
   useEffect(() => {
-    setCheckedElement([0]);
+    getStoragescanItems();
+    setCheckedElements([]);
   }, [press]);
+
 
   function hendlerCard(index) {
     setPress(true);
-    setCheckedElement(prev => [!prev[0]]);
+    // setCheckedElements(prev => [!prev[0]]);
+  }
+  function hendlerClickCard(index, scanItems) {
+    if (!press)
+      console.log("!press Click")
+    if (press) {
+      // console.log("press Click")
+      if (checkedElements.includes(scanItems[index].flight.data.id)) {
+        setCheckedElements(prev => prev.filter(e => e !== scanItems[index].flight.data.id))
+      } else {
+        setCheckedElements(prev => [...prev, scanItems[index].flight.data.id])
+      }
+    }
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <TouchableOpacity
-          style={styles.card}
-          onLongPress={() => hendlerCard(0)}
-          delayLongPress={500}
-        >
-          <Text>1</Text>
-          <View>
-            <Text>Название: </Text>
-            <Text>Кол-во мест: </Text>
-            <Text>Статус: </Text>
-            <Text>Создано: </Text>
-          </View>
-          <View>
-            <Text>Название: </Text>
-            <Text>Кол-во мест: </Text>
-            <Text>Статус: </Text>
-            <Text>Создано: </Text>
-          </View>
-          <View style={{ gap: 10 }}>
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Feather name="upload-cloud" size={24} color="#2196f3" />
-              <Text style={{ fontSize: 10 }}>Отпр: 0/10</Text>
-            </View>
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Feather name="download-cloud" size={24} color="#2196f3" />
-              <Text style={{ fontSize: 10 }}>Загр: 0/10</Text>
-            </View>
-          </View>
-          {press && (
-            <View>
-              {!checkedElement[0] === 0 && (
-                <Feather name="circle" size={24} color="#ddd" />
+        {scanItems?.map((e, index) => (
+          <View key={Math.random()}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() => hendlerClickCard(index, scanItems)}
+              onLongPress={() => hendlerCard(index, scanItems)}
+              delayLongPress={500}
+            >
+              <Text>{index + 1}</Text>
+              <View>
+                <Text>{e.flight.data.attributes.name}</Text>
+                <Text>Код. кл: {e.flight.data?.attributes?.customs[fields["clientCode"]]}</Text>
+                <Text>Транспорт: {e.flight.data?.attributes?.customs[fields["transport"]]}</Text>
+              </View>
+              <View>
+                <Text>Кол-во мест: {e?.slots?.filter((e) => e.data.id)?.length}</Text>
+                <Text>Ошибок: {e?.slots?.filter((e) => e.newData.attributes.customs[fields["scanTSD"] === "Ошибка"])?.length}</Text>
+                <Text>Статус: {e?.flight.data?.attributes?.customs[fields["scanTSD"]]}</Text>
+              </View>
+              <View style={{ gap: 10 }}>
+                <View style={{ alignItems: "center", justifyContent: "center" }}>
+                  {e?.slots?.filter((e) => e.newData.id)?.length == e?.slots?.filter((e) => e.data.id).length && e?.slots?.newData[0]?.id && <Feather name="upload-cloud" size={24} color="#2196f3" />}
+                  {e?.slots?.filter((e) => e.newData.id)?.length && e?.slots?.filter((e) => e.data.id).length && <Feather name="upload-cloud" size={24} color="#deb617" />}
+                  {!e?.slots?.filter((e) => e.newData.id)?.length && !e?.slots?.filter((e) => e.data.id).length && <Feather name="upload-cloud" size={24} color="#ddd" />}
+
+                  <Text style={{ fontSize: 10 }}>
+                    Отпр: {e?.slots?.filter((e) => e.newData.id) || "0"}/
+                    {e?.slots?.lenth || "0"}{" "}
+                  </Text>
+                </View>
+                <View style={{ alignItems: "center", justifyContent: "center" }}>
+                  {e?.slots?.filter((e) => e.data.id)?.length && <Feather name="download-cloud" size={24} color="#deb617" />}
+                  {!e?.slots?.filter((e) => e.data.id)?.length && <Feather name="download-cloud" size={24} color="#ddd" />}
+                  <Text style={{ fontSize: 10 }}>
+                    Загр: {e?.slots?.filter((e) => e.data.id) || "0"}/
+                    {e?.slots?.lenth || "0"}{" "}
+                  </Text>
+                </View>
+              </View>
+              {press && (
+                <View style={{ flexBasis: 25 }}>
+                  {checkedElements.includes(e.flight.data.id) && (
+                    <FontAwesome name="check-circle" size={24} color="#2196f3" />
+                  )}
+                  {!checkedElements.includes(e.flight.data.id) && (
+                    <FontAwesome name="circle-o" size={24} color="#ddd" />
+                  )}
+                </View>
               )}
-              {checkedElement[0] === 0 && (
-                <FontAwesome name="check-circle" size={24} color="#2196f3" />
-              )}
-            </View>
-          )}
-        </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

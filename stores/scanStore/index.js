@@ -1,4 +1,6 @@
+import config from "@/requests/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import * as zustand from "zustand";
 
 const scanStore = zustand.create((set) => ({
@@ -28,6 +30,16 @@ const scanStore = zustand.create((set) => ({
         scanItems: data,
       };
     });
+  },
+  downloadFlights: async ()=> {
+    const url = "https://app.salesap.ru/api/v1/deals?filter[deal-stage-id]=327688" /* сделки на этапе фрахтования */
+    console.log("SEND")
+    const res = await axios.get(url, config);
+    const data = res.data.data.map(e => ({ flight: { data: e } }))
+    AsyncStorage.setItem("scanItems", JSON.stringify(data));
+    return {
+      scanItems: data,
+    };
   },
   removeStoragescanItems: async () => {
     await AsyncStorage.setItem("scanItems", "");

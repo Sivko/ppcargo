@@ -1,13 +1,34 @@
+// import downloadFlights from "@/requests/communication/downloadFlights";
+// import scanStore from "@/stores/scanStore";
+import config from "@/requests/config";
+import downloadFlightDeals from "@/requests/communication/downloadFlights";
+import scanStore from "@/stores/scanStore";
+import axios from "axios";
+import { useEffect } from "react";
 import { Button, Text, View } from "react-native";
 
 function ModalScreen({ navigation }) {
+  const { resetStoragescanItems } = scanStore();
+  // const { downloadFlights } = scanStore();
+  const handlerClick = () => {
+    console.log("handlerClick")
+    async function fetching() {
+      const res = await downloadFlightDeals();
+      resetStoragescanItems(
+        res.data.data.map((e) => ({ flight: { data: e } })),
+      );
+    }
+    fetching();
+    console.log("handlerClickEnd");
+  };
+
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text style={{ textAlign: "center", marginBottom: 30 }}>
         Внимание! Все несинхронизированные данные будут потеряны, загрузить
         рейсы для сканировая?
       </Text>
-      <Button onPress={() => navigation.goBack()} title="Да, продолжить" />
+      <Button onPress={() => { handlerClick(); navigation.goBack() }} title="Да, продолжить" />
     </View>
   );
 }

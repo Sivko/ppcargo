@@ -9,13 +9,14 @@ import {
   Button,
 } from "react-native";
 
-import { removeFlightDeals } from "@/requests/local/getSetFlights";
+// import { removeFlightDeals } from "@/requests/local/getSetFlights";
 import { getLogsData, removeLogsData } from "@/requests/local/getSetLogs";
 import invocesToUploadStore from "@/stores/invocesToUploadStore";
 import logginStore from "@/stores/logginStore";
-
+import scanStore from "@/stores/scanStore";
 export function Option() {
   const { setLoading } = invocesToUploadStore();
+  const { removeStoragescanItems } = scanStore();
   const { unloggin } = logginStore();
   const [logs, setLogs] = useState([]);
 
@@ -31,12 +32,12 @@ export function Option() {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View>
-          <Button
+          {/* <Button
             title="Очистить Рейсы"
             onPress={() => {
               removeFlightDeals();
             }}
-          />
+          /> */}
           <Button
             title="Очистить Логи"
             onPress={() => {
@@ -51,6 +52,7 @@ export function Option() {
               alert("Все состояния сброшены");
             }}
           />
+          <Button title="Удалить загр. рейсы" onPress={removeStoragescanItems} />
           <Button title="Выйти" onPress={unloggin} />
           <Text>Логи:</Text>
           <Text>{JSON.stringify(logs)}</Text>
