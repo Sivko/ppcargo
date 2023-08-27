@@ -60,16 +60,16 @@ export default function SlotList({ data, setData, navigation }) {
           </Text>
           {el.item?.data?.attributes?.customs[fields["scanTSD"]] ===
             "Найдено" && (
-            <Text>
-              Статус: <Text style={{ color: "green" }}>Найдено</Text>
-            </Text>
-          )}
+              <Text>
+                Статус: <Text style={{ color: "green" }}>Найдено</Text>
+              </Text>
+            )}
           {el.item?.data?.attributes?.customs[fields["scanTSD"]] ===
             "Ошибка" && (
-            <Text>
-              Статус: <Text style={{ color: "red" }}>Ошибка</Text>
-            </Text>
-          )}
+              <Text>
+                Статус: <Text style={{ color: "red" }}>Ошибка</Text>
+              </Text>
+            )}
         </View>
       </View>
     </TouchableHighlight>
@@ -101,7 +101,7 @@ export default function SlotList({ data, setData, navigation }) {
         />
       ) : (
         <View>
-          <Text>Ничего не найдено</Text>
+          <Text style={{ textAlign: "center" }}>Ничего не найдено</Text>
         </View>
       )}
     </>

@@ -15,7 +15,7 @@ function ModalScreen({ navigation }) {
     async function fetching() {
       const res = await downloadFlightDeals();
       resetStoragescanItems(
-        res.data.data.map((e) => ({ flight: { data: e } })),
+        res.data.data.map((e) => ({ flight: { data: { id: e.id, type: e.type, attributes: e.attributes } } })),
       );
     }
     fetching();

@@ -17,26 +17,39 @@ import pressedStore from "@/stores/pressedStore";
 import scanStore from '@/stores/scanStore';
 import { fields } from '@/requests/config';
 
-export default function DownloadFlights() {
-  const { scanItems, getStoragescanItems } = scanStore();
+export default function DownloadFlights({ navigation }) {
+  const { scanItems, getStoragescanItems, setIdFlightsToDownloads } = scanStore();
   const { press, setPress } = pressedStore();
   const [checkedElements, setCheckedElements] = useState([]);
+  // const [items, setItems] = useState(scanItems);
 
   useEffect(() => {
     getStoragescanItems();
     setCheckedElements([]);
   }, [press]);
 
+  useEffect(() => {
+    setIdFlightsToDownloads(checkedElements);
+  }, [checkedElements]);
 
   function hendlerCard(index) {
     setPress(true);
     // setCheckedElements(prev => [!prev[0]]);
   }
   function hendlerClickCard(index, scanItems) {
-    if (!press)
-      console.log("!press Click")
+    if (!press) {
+      if (scanItems[index]?.slots?.length) {
+        navigation.push("Сканирование", { index: String(index) });
+        return;
+      } else {
+        alert("Нет загруженных мест");
+      }
+    }
+    // alert("!press Click")
     if (press) {
-      // console.log("press Click")
+      if (scanItems[index]?.slots?.length) {
+        return;
+      }
       if (checkedElements.includes(scanItems[index].flight.data.id)) {
         setCheckedElements(prev => prev.filter(e => e !== scanItems[index].flight.data.id))
       } else {
@@ -63,30 +76,29 @@ export default function DownloadFlights() {
                 <Text>Транспорт: {e.flight.data?.attributes?.customs[fields["transport"]]}</Text>
               </View>
               <View>
-                <Text>Кол-во мест: {e?.slots?.filter((e) => e.data.id)?.length}</Text>
-                <Text>Ошибок: {e?.slots?.filter((e) => e.newData.attributes.customs[fields["scanTSD"] === "Ошибка"])?.length}</Text>
+                <Text>Кол-во мест: {e?.slots?.length}</Text>
+                <Text>Ошибок: {e?.slots?.filter((el) => el.data?.attributes?.customs[fields["scanTSD"]] == "Ошибка")?.length}</Text>
                 <Text>Статус: {e?.flight.data?.attributes?.customs[fields["scanTSD"]]}</Text>
               </View>
               <View style={{ gap: 10 }}>
                 <View style={{ alignItems: "center", justifyContent: "center" }}>
-                  {e?.slots?.filter((e) => e.newData.id)?.length == e?.slots?.filter((e) => e.data.id).length && e?.slots?.newData[0]?.id && <Feather name="upload-cloud" size={24} color="#2196f3" />}
-                  {e?.slots?.filter((e) => e.newData.id)?.length && e?.slots?.filter((e) => e.data.id).length && <Feather name="upload-cloud" size={24} color="#deb617" />}
-                  {!e?.slots?.filter((e) => e.newData.id)?.length && !e?.slots?.filter((e) => e.data.id).length && <Feather name="upload-cloud" size={24} color="#ddd" />}
+                  {/* {e?.slots?.filter((e) => e.data.id)?.length == e?.slots?.filter((e) => e.data.id).length && <Feather name="upload-cloud" size={24} color="#2196f3" />}
+                  {e?.slots?.filter((e) => e.data.id)?.length && e?.slots?.filter((e) => e.data.id).length && <Feather name="upload-cloud" size={24} color="#deb617" />}
+                  {!e?.slots?.filter((e) => e.data.id)?.length && !e?.slots?.filter((e) => e.data.id).length && <Feather name="upload-cloud" size={24} color="#ddd" />} */}
 
                   <Text style={{ fontSize: 10 }}>
-                    Отпр: {e?.slots?.filter((e) => e.newData.id) || "0"}/
-                    {e?.slots?.lenth || "0"}{" "}
+                    Отпр: {"?" || "0"}
                   </Text>
                 </View>
                 <View style={{ alignItems: "center", justifyContent: "center" }}>
-                  {e?.slots?.filter((e) => e.data.id)?.length && <Feather name="download-cloud" size={24} color="#deb617" />}
+                  {e?.slots?.filter((e) => e.data.id)?.length && <Feather name="download-cloud" size={24} color="#2196f3" />}
                   {!e?.slots?.filter((e) => e.data.id)?.length && <Feather name="download-cloud" size={24} color="#ddd" />}
                   <Text style={{ fontSize: 10 }}>
-                    Загр: {e?.slots?.filter((e) => e.data.id) || "0"}/
-                    {e?.slots?.lenth || "0"}{" "}
+                    Загр: {e?.slots?.filter(e => e?.data?.id)?.length || "0"}
                   </Text>
                 </View>
               </View>
+              {/* {press && !e?.slots?.filter((e) => e.data.id)?.length && ( */}
               {press && (
                 <View style={{ flexBasis: 25 }}>
                   {checkedElements.includes(e.flight.data.id) && (

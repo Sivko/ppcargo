@@ -10,11 +10,16 @@ import ScannerScreen from "@/screens/screen2/ScannerScreen";
 import Slot from "@/screens/screen2/Slot";
 import loadingStore from "@/stores/loadingStore";
 import pressedStore from "@/stores/pressedStore";
+import downloadSlotInFlights from '@/requests/communication/downloadSlotInFlights';
+import scanStore from '@/stores/scanStore';
+import uploadFlights from '@/requests/communication/uploadFlights';
 
 const Screens = createNativeStackNavigator();
 
 export function Stack2({ navigation }) {
-  const { loading } = loadingStore();
+
+  const {idFlightsToDownloads, resetStoragescanItems, scanItems} = scanStore();
+  const { loading, setLoading } = loadingStore();
   const { press, setPress } = pressedStore();
   return (
     <Screens.Navigator>
@@ -32,6 +37,7 @@ export function Stack2({ navigation }) {
                 onPress={() => {
                   if (loading) {
                     alert("Есть активная загрузка");
+                    return;
                   }
                   navigation.navigate("Загрузка");
                 }}
@@ -45,20 +51,20 @@ export function Stack2({ navigation }) {
               <Button
                 title="Загрузить"
                 disabled={loading}
-                onPress={() => alert(123)}
+                onPress={() => downloadSlotInFlights({idFlightsToDownloads, resetStoragescanItems, scanItems ,setLoading})}
               />
             ) : (
               <Button
-                title="Сох в S2"
+                title="Сохр. в S2"
                 disabled={loading}
-                onPress={() => alert(123)}
+                onPress={() => uploadFlights({resetStoragescanItems, scanItems ,setLoading})}
               />
             ),
         })}
       />
       <Screens.Screen
-        options={{ headerShown: false }}
-        name="Scaner"
+        // options={{ headerShown: false }}
+        name="Сканирование"
         component={ScannerScreen}
       />
       <Screens.Screen name="Загрузка" component={ModalScreen} />

@@ -22,7 +22,7 @@ function SlotIndex({ route }) {
   const [weight, setWeight] = useState(route.params.data[route.params.index - 1].data?.attributes?.customs[fields["weight"]] || "",);
   const [barcode, setBarcode] = useState(route.params.data[route.params.index - 1].data?.attributes?.customs[fields["barcode"]] || "",);
   const [description, setDescription] = useState(route.params.data[route.params.index - 1].data?.attributes?.description,);
-  const [transport, setTransport] = useState(route.params.data[route.params.index - 1].data?.attributes?.customs[fields["transport"]] || "",);
+  const [transport, setTransport] = useState(route.params.data[route.params.index - 1].data?.attributes?.customs[fields["transport"]][0] || "",);
 
   useEffect(() => {
     setData((prev) => {
@@ -53,7 +53,6 @@ function SlotIndex({ route }) {
           {/* <Text>{JSON.stringify(route.params.data[route.params.index - 1].attributes?.customs['custom_114632'])}</Text> */}
           {/* <ImagePickerPreview> */}
           <AntDesign name="picture" size={124} color="black" />
-          <Text>icon</Text>
           {/* </ImagePickerPreview> */}
           <View style={styles.dimensions}>
             <View style={styles.wrapper}>
@@ -106,7 +105,7 @@ function SlotIndex({ route }) {
             </View>
             {/* </View>
           <View style={{ flex: 1, flexDirection: "row" }}> */}
-            <View style={{ ...styles.wrapper, width: "100%" }}>
+            {/* <View style={{ ...styles.wrapper, width: "100%" }}>
               <View style={styles.fieldSet}>
                 <Text style={styles.legend}>Штрих-код</Text>
                 <TextInput
@@ -117,7 +116,7 @@ function SlotIndex({ route }) {
                   onFocus={focus(setBarcode)}
                 />
               </View>
-            </View>
+            </View> */}
           </View>
           <View style={{ ...styles.wrapper, width: "100%" }}>
             <View style={styles.fieldSet}>
