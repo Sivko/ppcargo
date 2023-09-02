@@ -17,10 +17,10 @@ export default async function downloadSlotInFlights({ idFlightsToDownloads, rese
       // resetStoragescanItems([tmp, ...scanItems.filter((e) => e.flight.data.id !== idFlightsToDownloads[i])]);
       let includeDeals = res.data?.included.map(e => e.id)
       for (let m in includeDeals) {
-        const includeDealStage = await axios.get(`https://app.salesap.ru/api/v1/deals/${includeDeals[m]}/relationships/stage-category`).catch(e=>console.log(e.message))
-        if (includeDealStage.data.id === stagesCategories.transport) {
+        const includeDealStage = await axios.get(`https://app.salesap.ru/api/v1/deals/${includeDeals[m]}/relationships/stage-category`, config).catch(e=>console.log(e.message))
+        if (includeDealStage.data.id === stagesCategories.invoice) /*Get Invoices in Flight*/ {
           console.log(`https://app.salesap.ru/api/v1/deals/${includeDeals[m]}`, "AAAA")
-          const includeDeal = await axios.get(`https://app.salesap.ru/api/v1/deals/${includeDeals[m]}`).catch(e=>console.log(e.message));
+          const includeDeal = await axios.get(`https://app.salesap.ru/api/v1/deals/${includeDeals[m]}`, config).catch(e=>console.log(e.message));
           tmp.slots = [includeDeal.data, ...tmp.slots];
           resetStoragescanItems([tmp, ...scanItems.filter((e) => e.flight.data.id !== idFlightsToDownloads[i])]);
         }
