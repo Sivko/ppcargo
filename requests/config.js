@@ -14,7 +14,13 @@ export const stagesCategories = {
   transport: "51231",
   invoice: "51230",
   slot: "51229",
-}
+};
+
+export const stagesFirstId = {
+  transport: "327688",
+  invoice: "327685",
+  slot: "327682",
+};
 
 export const fields = {
   idStageSlot: 327682,

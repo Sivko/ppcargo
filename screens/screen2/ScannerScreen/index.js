@@ -3,12 +3,11 @@ import { View, StyleSheet, Button, TextInput, Text } from "react-native";
 
 import SlotList from "@/components/slot/SlotList";
 import { fields } from "@/requests/config";
-import constSlots from "@/requests/constSlots";
 import defaultSlot from "@/requests/local/defaultSlot";
 import scanStore from "@/stores/scanStore";
 export function ScannerScreen({ navigation, route }) {
   const { scanItems, resetStoragescanItems } = scanStore();
-  const [index, setIndex] = useState(route.params?.index || null)
+  const [index, setIndex] = useState(route.params?.index || null);
   const [slot, setSlot] = useState([scanItems[route.params.index]][0].slots);
   // console.log([scanItems[route?.params?.index]][0].slots, "123123");
   const [barcodeInput, setBarcodeInput] = useState("");
@@ -22,19 +21,19 @@ export function ScannerScreen({ navigation, route }) {
 
   useEffect(() => {
     if (index !== null) {
-      let tmp = JSON.parse(JSON.stringify(scanItems));
+      const tmp = JSON.parse(JSON.stringify(scanItems));
       // debugger
       tmp[Number(index)].slots = JSON.parse(JSON.stringify(slot));
       resetStoragescanItems(tmp);
       // debugger
       console.log(tmp, "TTTMP", index);
-    };
+    }
   }, [slot, route]);
 
   function searchSlot(input) {
     setBarcodeInput(input.trim());
     const find = slot.filter(
-      (item) => item.data.attributes.name === input.trim(),
+      (item) => item.data.attributes.customs[fields["barcode"]] == input.trim(),
     );
     if (find.length === 1) {
       const elem = find[0];
@@ -76,11 +75,16 @@ export function ScannerScreen({ navigation, route }) {
             }}
           />
         </View>
-        <View style={{ width: "100%" }}>
+        <View style={{ width: "100%", display: "flex", flex: "1" }}>
           <SlotList
-            data={slot.filter((e) =>
-              e.data.attributes.name.includes(barcodeInput),
-            )}
+            data={slot.filter((e) => {
+              if (barcodeInput) {
+                if (e.data.attributes?.customs[fields["barcode"]])
+                  return e.data.attributes?.customs[fields["barcode"]].includes(barcodeInput);
+              } else {
+                return true;
+              }
+            })}
             setData={setSlot}
             navigation={navigation}
           />

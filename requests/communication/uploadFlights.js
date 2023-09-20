@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import config, { fields } from "../config";
+import config, { fields, stagesCategories, stagesFirstId } from "../config";
 
 const slotToUpload = {
   data: {
@@ -17,14 +17,6 @@ const slotToUpload = {
         [fields["transport"]]: "",
         [fields["clientCode"]]: "",
         [fields["numberTTN"]]: "",
-      },
-    },
-    relationships: {
-      stage: {
-        data: {
-          type: "deal-stages",
-          id: 1,
-        },
       },
     },
   },
@@ -61,6 +53,14 @@ export default async function uploadFlights({ resetStoragescanItems, scanItems, 
         } else {
           console.log("доабвление");
           const url = `https://app.salesap.ru/api/v1/deals`;
+          tmp.data.relationships = {
+            stage: {
+              data: {
+                type: "deal-stages",
+                id: stagesFirstId.slot,
+              },
+            },
+          };
           const res = await axios.post(url, { data: tmp.data }, config).catch(e => console.log(e));
           console.log("Добавлено", res);
         }

@@ -11,11 +11,11 @@ import {
 
 // import { removeFlightDeals } from "@/requests/local/getSetFlights";
 import { getLogsData, removeLogsData } from "@/requests/local/getSetLogs";
-import invocesToUploadStore from "@/stores/invocesToUploadStore";
+import loadingStore from "@/stores/loadingStore";
 import logginStore from "@/stores/logginStore";
 import scanStore from "@/stores/scanStore";
 export function Option() {
-  const { setLoading } = invocesToUploadStore();
+  const { setLoading } = loadingStore();
   const { removeStoragescanItems } = scanStore();
   const { unloggin } = logginStore();
   const [logs, setLogs] = useState([]);
