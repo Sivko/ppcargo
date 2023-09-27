@@ -7,7 +7,7 @@ import logginStore from "@/stores/logginStore";
 
 function Login() {
   const { user, loggin } = logginStore();
-  const [email, setEmail] = useState("ddmitrova@gmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const [submit, setSubmit] = useState(false);
@@ -32,32 +32,32 @@ function Login() {
           `https://app.salesap.ru/api/v1/users?filter[email]=${encodeURI(
             email,
           )}`,
-          config,
+          config(user?.token),
         );
         const data = res.data?.data[0];
         if (res.status !== 200) {
           await setErrors([JSON.stringify(...res.data.errors)]);
           return;
         }
-        if (data.attributes.email !== email) {
+        if (data?.attributes?.email !== email) {
           await setErrors(["Email не найден"]);
           return;
         }
-        if (!true) {
+        if (!data.attributes?.customs[fields["userPassword"]]) {
           await setErrors(["У пользователя не задан пароль в настройках"]);
           return;
         }
-        if (password !== "123") {
+        if (password != data.attributes.customs[fields["userPassword"]]) {
           await setErrors(["Неверный пароль"]);
           return;
         }
-        if (data[fields["token"]] === "") {
-          await setErrors(["У пользователя не указан Токен"]);
+        if (data.attributes.customs[fields["userToken"]] === "") {
+          await setErrors(["У пользователя не указан Токен, укажите его в приложении СРМ"]);
           return;
         }
         loggin({
           id: data.id,
-          token: data[fields["token"]],
+          token: data.attributes.customs[fields["userToken"]],
           ...data.attributes,
         });
       } catch (error) {

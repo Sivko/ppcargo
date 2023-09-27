@@ -1,7 +1,7 @@
 // import downloadFlights from "@/requests/communication/downloadFlights";
 // import scanStore from "@/stores/scanStore";
 import config from "@/requests/config";
-import downloadFlightDeals from "@/requests/communication/downloadFlights";
+import downloadFlights from "@/requests/communication/downloadFlights";
 import scanStore from "@/stores/scanStore";
 import axios from "axios";
 import { useEffect } from "react";
@@ -13,7 +13,7 @@ function ModalScreen({ navigation }) {
   const handlerClick = () => {
     console.log("handlerClick")
     async function fetching() {
-      const res = await downloadFlightDeals();
+      const res = await downloadFlights();
       resetStoragescanItems(
         res.data.data.map((e) => ({ flight: { data: { id: e.id, type: e.type, attributes: e.attributes } } })),
       );

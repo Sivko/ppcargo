@@ -4,12 +4,12 @@ import axios from "axios";
 import config, { stagesCategories, timeout } from "@/requests/config";
 
 // const { idFlightsToDownloads } = scanStore();
-export default async function downloadSlotInFlights({ idFlightsToDownloads, resetStoragescanItems, scanItems, setLoading }) {
+export default async function downloadSlotInFlights({ idFlightsToDownloads, resetStoragescanItems, scanItems, setLoading, user }) {
   console.log(scanItems, "scanItems");
   setLoading(true);
   for (let i in idFlightsToDownloads) {
     const url = `https://app.salesap.ru/api/v1/deals/${idFlightsToDownloads[i]}?include=deals`;
-    const res = await axios.get(url, config);
+    const res = await axios.get(url, config(user?.token));
     if (res.data?.included?.length) {
       console.log("Сработала проверочка")
       let tmp = scanItems.filter((e) => e.flight.data.id === idFlightsToDownloads[i])[0];
@@ -19,19 +19,19 @@ export default async function downloadSlotInFlights({ idFlightsToDownloads, rese
       // resetStoragescanItems([tmp, ...scanItems.filter((e) => e.flight.data.id !== idFlightsToDownloads[i])]);
       const childrenDeals = res.data?.included.map(e => e.id)
       for (let n in childrenDeals) {
-        const getChildrenStage = await axios.get(`https://app.salesap.ru/api/v1/deals/${childrenDeals[n]}/relationships/stage-category`, config).catch(e => console.log(e.message));
+        const getChildrenStage = await axios.get(`https://app.salesap.ru/api/v1/deals/${childrenDeals[n]}/relationships/stage-category`, config(user?.token)).catch(e => console.log(e.message));
         // debugger
         if (getChildrenStage.data.data.id === stagesCategories.invoice) {
           console.log("Сработала проверочка 2")
-          const getIncludesInInvoice = await axios.get(`https://app.salesap.ru/api/v1/deals/${childrenDeals[n]}?include=deals`, config);
+          const getIncludesInInvoice = await axios.get(`https://app.salesap.ru/api/v1/deals/${childrenDeals[n]}?include=deals`, config(user?.token));
           const getIncludesInInvoiceId = getIncludesInInvoice.data?.included.map(e => e.id);
           for (let x in getIncludesInInvoiceId) {
-            const getStageIncludesInInvoice = await axios.get(`https://app.salesap.ru/api/v1/deals/${getIncludesInInvoiceId[x]}/relationships/stage-category`, config).catch(e => console.log(e.message));
+            const getStageIncludesInInvoice = await axios.get(`https://app.salesap.ru/api/v1/deals/${getIncludesInInvoiceId[x]}/relationships/stage-category`, config(user?.token)).catch(e => console.log(e.message));
             if (getStageIncludesInInvoice.data.data.id === stagesCategories.slot) {
               console.log("Сработала проверочка 3")
-              const slotData = await axios.get(`https://app.salesap.ru/api/v1/deals/${getIncludesInInvoiceId[x]}`, config).catch(e => console.log(e.message));
+              const slotData = await axios.get(`https://app.salesap.ru/api/v1/deals/${getIncludesInInvoiceId[x]}`, config(user?.token)).catch(e => console.log(e.message));
               const _slotData = slotData.data.data;
-              tmp.slots = [...tmp.slots, { data: { id: _slotData.id, type: 'deals', attributes: _slotData.attributes } }];
+              tmp.slots = [...tmp.slots, { data: { id: _slotData.id, type: 'deals', attributes: _slotData.attributes }}];
               resetStoragescanItems([tmp, ...scanItems.filter((e) => e.flight.data.id !== idFlightsToDownloads[i])]);
             }
           }

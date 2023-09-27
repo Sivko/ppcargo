@@ -75,7 +75,7 @@ export function ScannerScreen({ navigation, route }) {
             }}
           />
         </View>
-        <View style={{ width: "100%", display: "flex", flex: "1" }}>
+        <View style={{ width: "100%", display: "flex", flexDirection:'column', flexGrow: 1, flexShrink: 1, flexBasis: '0%'}}>
           <SlotList
             data={slot.filter((e) => {
               if (barcodeInput) {

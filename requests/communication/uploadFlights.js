@@ -1,6 +1,7 @@
 import axios from "axios";
 
-import config, { fields, stagesCategories, stagesFirstId } from "../config";
+import config, { fields, stagesCategories, stagesFirstId } from "@/requests/config";
+import { setLogsData } from "../local/getSetLogs";
 
 const slotToUpload = {
   data: {
@@ -17,14 +18,18 @@ const slotToUpload = {
         [fields["transport"]]: "",
         [fields["clientCode"]]: "",
         [fields["numberTTN"]]: "",
+        [fields["scanTSD"]]: "Ошибка",
       },
     },
   },
   images: [],
+  status: false,
 };
 
-export default async function uploadFlights({ resetStoragescanItems, scanItems, setLoading }) {
+export default async function uploadFlights({ resetStoragescanItems, scanItems, setLoading, user }) {
   setLoading(true);
+  // console.log(scanItems.map(e=>e.slots))
+  // return
   for (let m in scanItems) {
     if (scanItems[m].slots) {
       const items = scanItems[m].slots;
@@ -43,17 +48,26 @@ export default async function uploadFlights({ resetStoragescanItems, scanItems, 
         tmp.data.attributes.customs[fields["transport"]] = items[i].data.attributes.customs[fields["transport"]];
         tmp.data.attributes.customs[fields["clientCode"]] = items[i].data.attributes.customs[fields["clientCode"]];
         tmp.data.attributes.customs[fields["numberTTN"]] = items[i].data.attributes.customs[fields["numberTTN"]];
-        tmp.data.relationships.stage.data.id = scanItems[m].flight.data.id;
-        console.log(tmp);
+        tmp.data.attributes.customs[fields["scanTSD"]] = items[i].data.attributes.customs[fields["scanTSD"]] || "Ошибка";
+        // tmp.data.relationships?.stage?.data?.id = scanItems[m]?.flight?.data?.id;
+        // console.log(tmp);
+        // console.log(scanItems[m])
+        // return
         if (tmp.data?.id) {
           console.log("обновление");
           const url = `https://app.salesap.ru/api/v1/deals/${tmp.data.id}`;
-          const res = await axios.put(url, { data: tmp.data }, config).catch(e => console.log(e));
-          console.log("Обновлено", res);
+          const res = await axios.put(url, { data: tmp.data }, config(user?.token)).catch(e => setLogsData({ "error": e }));
+          // console.log("Обновлено", res);
         } else {
           console.log("доабвление");
           const url = `https://app.salesap.ru/api/v1/deals`;
           tmp.data.relationships = {
+            deals: {
+              data: [{
+                type: "deals",
+                id: scanItems[m].flight.data.id
+              }]
+            },
             stage: {
               data: {
                 type: "deal-stages",
@@ -61,9 +75,12 @@ export default async function uploadFlights({ resetStoragescanItems, scanItems, 
               },
             },
           };
-          const res = await axios.post(url, { data: tmp.data }, config).catch(e => console.log(e));
-          console.log("Добавлено", res);
+          // console.log(tmp.data.relationships, "FFFFF")
+          const res = await axios.post(url, { data: tmp.data }, config(user?.token)).catch(e => setLogsData({ "error": e }));
+          // console.log("Добавлено", res);
         }
+        tmp.status = true;
+        resetStoragescanItems(scanItems)
       }
     }
   }

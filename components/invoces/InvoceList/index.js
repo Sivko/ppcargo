@@ -64,15 +64,15 @@ export default function InvoceList() {
               Отправлено мест: {data.item?.slots.filter((e) => e.data.id).length}
             </Text>
             {!data.item?.invoice?.data?.id && (
-              <Feather name="download-cloud" size={24} color="#ddd" />
+              <Feather name="upload-cloud" size={24} color="#ddd" />
               // <Text>icon</Text>
             )}
             {data.item?.slots?.length === data.item?.slots.filter((e) => e.data.id).length && (
-              <Feather name="download-cloud" size={24} color="#2196f3" />
+              <Feather name="upload-cloud" size={24} color="#2196f3" />
               // <Text>icon</Text>
             )}
             {data.item?.invoice?.data?.id && data.item?.slots?.length !== data.item?.slots.filter((e) => e.data.id).length && (
-              <Feather name="download-cloud" size={24} color="#deb617" />
+              <Feather name="upload-cloud" size={24} color="#deb617" />
               // <Text>icon</Text>
             )}
           </View>

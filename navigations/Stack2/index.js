@@ -13,24 +13,29 @@ import pressedStore from "@/stores/pressedStore";
 import downloadSlotInFlights from '@/requests/communication/downloadSlotInFlights';
 import scanStore from '@/stores/scanStore';
 import uploadFlights from '@/requests/communication/uploadFlights';
+import logginStore from '@/stores/logginStore';
 
 const Screens = createNativeStackNavigator();
 
 export function Stack2({ navigation }) {
 
-  const {idFlightsToDownloads, resetStoragescanItems, scanItems} = scanStore();
+  const { idFlightsToDownloads, resetStoragescanItems, scanItems } = scanStore();
   const { loading, setLoading } = loadingStore();
   const { press, setPress } = pressedStore();
+  const { user } = logginStore();
+
   return (
     <Screens.Navigator>
       <Screens.Screen
-        name="Список рейсов"
+        name={loading ? "Выполнение" : "Список рейсов"}
         component={DownloadFlights}
         options={() => ({
           headerShown: true,
           headerTitleAlign: "center",
-          headerLeft: () =>
-            press ? (
+          headerLeft: () => {
+            if (loading)
+              return ""
+            return press ? (
               <Button onPress={() => setPress(false)} title="Отмена" />
             ) : (
               <TouchableOpacity
@@ -45,21 +50,25 @@ export function Stack2({ navigation }) {
               >
                 <Octicons name="download" size={24} color="#2196f3" />
               </TouchableOpacity>
-            ),
-          headerRight: () =>
-            press ? (
+            )
+          },
+          headerRight: () => {
+            if (loading)
+              return ""
+            return press ? (
               <Button
                 title="Загрузить"
                 disabled={loading}
-                onPress={() => downloadSlotInFlights({idFlightsToDownloads, resetStoragescanItems, scanItems ,setLoading})}
+                onPress={() => downloadSlotInFlights({ idFlightsToDownloads, resetStoragescanItems, scanItems, setLoading, user })}
               />
             ) : (
               <Button
                 title="Сохр. в S2"
                 disabled={loading}
-                onPress={() => uploadFlights({resetStoragescanItems, scanItems ,setLoading})}
+                onPress={() => uploadFlights({ resetStoragescanItems, scanItems, setLoading, user })}
               />
-            ),
+            )
+          }
         })}
       />
       <Screens.Screen

@@ -6,7 +6,7 @@ import { View, TextInput, Button, StyleSheet } from "react-native";
 function AddInvoices({ navigation }) {
   const [clientCode, setClientCode] = useState("");
   const [numberTTN, setNumberTTN] = useState("");
-  const [countBox, setCountBox] = useState(1);
+  const [countBox, setCountBox] = useState("");
 
   // useEffect(() => {
   //   setInvoceInfo({

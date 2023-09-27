@@ -31,10 +31,10 @@ export function Stack1() {
         name="AddInvoices"
         component={FirstScreen}
       />
-      <SettingsStack.Screen name="Оформить" component={CreateScreen} />
-      <SettingsStack.Screen name="Место" component={SlotIndex} />
+      <SettingsStack.Screen name={"Оформить"} component={CreateScreen} />
+      <SettingsStack.Screen name={"Место"} component={SlotIndex} />
       <SettingsStack.Screen
-        name="Квитанции"
+        name={"Квитанции"}
         component={Invoices}
         options={() => ({
           headerRight: () => (

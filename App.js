@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Login from "./components/Login";
 import Tabs from "./navigations/Tabs";
 import logginStore from "./stores/logginStore";
+import { Text } from "react-native";
 
 export default function App() {
   const { user, getStorage } = logginStore();
@@ -15,6 +16,7 @@ export default function App() {
     <>
       {user?.id ? (
         <NavigationContainer>
+          <Text>Lorem:{user.token}</Text>
           <Tabs />
         </NavigationContainer>
       ) : (
