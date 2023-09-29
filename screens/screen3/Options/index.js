@@ -17,7 +17,7 @@ import scanStore from "@/stores/scanStore";
 export function Option() {
   const { setLoading } = loadingStore();
   const { removeStoragescanItems } = scanStore();
-  const { unloggin } = logginStore();
+  const { unloggin, user } = logginStore();
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
@@ -38,6 +38,7 @@ export function Option() {
               removeFlightDeals();
             }}
           /> */}
+          <Text>Пользователь: {user.email} ({user.id})</Text>
           <Button
             title="Очистить Логи"
             onPress={() => {

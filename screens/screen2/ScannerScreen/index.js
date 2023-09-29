@@ -70,6 +70,7 @@ export function ScannerScreen({ navigation, route }) {
               const tmp = defaultSlot({ clientCode: "", numberTTN: "" });
               tmp.data.attributes.customs[fields["scanTSD"]] = "Ошибка";
               tmp.data.attributes.customs[fields["barcode"]] = barcodeInput;
+              tmp.invoices = slot[0].invoices;
               setSlot((prev) => [tmp, ...prev]);
               setBarcodeInput("");
             }}

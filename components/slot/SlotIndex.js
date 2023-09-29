@@ -23,6 +23,9 @@ function SlotIndex({ route }) {
   const [barcode, setBarcode] = useState(route.params.data[route.params.index - 1].data?.attributes?.customs[fields["barcode"]] || "",);
   const [description, setDescription] = useState(route.params.data[route.params.index - 1].data?.attributes?.description,);
   const [transport, setTransport] = useState(route.params.data[route.params.index - 1].data?.attributes?.customs[fields["transport"]][0] || "",);
+  const [invoiceId, setInvoiceId] = useState(route.params.data[route.params.index - 1].invoiceId || "",);
+  const [invoces, setInvoices] = useState(route.params.data[route.params.index - 1].invoices || [],);
+  const [uploadStatus, setUploadSatus] = useState(route.params.data[route.params.index - 1].uploadStatus || false,);
 
   useEffect(() => {
     setData((prev) => {
@@ -34,9 +37,11 @@ function SlotIndex({ route }) {
       slots[route.params.index - 1].data.attributes.customs[fields["weight"]] = weight;
       slots[route.params.index - 1].data.attributes.customs[fields["barcode"]] = barcode;
       slots[route.params.index - 1].data.attributes.customs[fields["transport"]] = transport;
+      slots[route.params.index - 1].invoiceId = invoiceId;
+      slots[route.params.index - 1].uploadStatus = false;
       return slots;
     });
-  }, [length, width, height, transport, weight, description, barcode]);
+  }, [length, width, height, transport, weight, description, barcode, uploadStatus, invoiceId]);
 
   function focus(setValue) {
     return function (e) {
@@ -133,6 +138,27 @@ function SlotIndex({ route }) {
                   >
                     <Text style={{ color: transport === e ? "#fff" : "#000" }}>
                       {e}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          </View>
+          <View style={{ ...styles.wrapper, width: "100%" }}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Квитанция (ID):</Text>
+              <View style={styles.pickerWrapper}>
+                {invoces.map((e, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={{
+                      ...styles.picker,
+                      backgroundColor: e.id === invoiceId ? "#207aff" : "#ddd",
+                    }}
+                    onPress={() => setInvoiceId(e.id)}
+                  >
+                    <Text style={{ color: e.id === invoiceId ? "#fff" : "#000" }}>
+                      {e.name}
                     </Text>
                   </TouchableOpacity>
                 ))}

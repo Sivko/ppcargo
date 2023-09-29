@@ -2,18 +2,17 @@
 
 // const { user, loggin } = logginStore();
 
-
 export const config = (token = 'mUYmfdF5Hr0zUC9b3WLmR94p_DH4-GPkdQ42FmBZpv0') => {
   return {
+    validateStatus(status) {
+      return status < 500; // Resolve only if the status code is less than 500
+    },
     headers: {
       "Content-Type": "application/vnd.api+json",
       Authorization: `Bearer ${token}`,
     },
-    validateStatus(status) {
-      return status < 500; // Resolve only if the status code is less than 500
-    },
   };
-}
+};
 
 export const timeout = 300;
 

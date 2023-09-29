@@ -88,7 +88,7 @@ export default function DownloadFlights({ navigation }) {
                   {!e?.slots?.filter((e) => e.data.id)?.length && !e?.slots?.filter((e) => e.data.id).length && <Feather name="upload-cloud" size={24} color="#ddd" />} */}
 
                   <Text style={{ fontSize: 10 }}>
-                    Отпр: {"?" || "0"}
+                    Отпр: {e?.slots?.filter(e => e?.uploadStatus === true).length || 0}
                   </Text>
                 </View>
                 <View style={{ alignItems: "center", justifyContent: "center" }}>

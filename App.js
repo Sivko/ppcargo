@@ -16,7 +16,6 @@ export default function App() {
     <>
       {user?.id ? (
         <NavigationContainer>
-          <Text>Lorem:{user.token}</Text>
           <Tabs />
         </NavigationContainer>
       ) : (
